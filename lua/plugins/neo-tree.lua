@@ -1,5 +1,22 @@
 return {
   "nvim-neo-tree/neo-tree.nvim",
+  init = function()
+    -- Refresh Neo-tree git status when leaving a terminal buffer,
+    -- since libuv fs_event may not fire while the terminal is active.
+    vim.api.nvim_create_autocmd("TermLeave", {
+      callback = function()
+        local ok, manager = pcall(require, "neo-tree.sources.manager")
+        if ok then
+          for _, source in ipairs({ "filesystem", "git_status" }) do
+            local mod = "neo-tree.sources." .. source
+            if package.loaded[mod] then
+              manager.refresh(require(mod).name)
+            end
+          end
+        end
+      end,
+    })
+  end,
   opts = {
     event_handlers = {
       {
