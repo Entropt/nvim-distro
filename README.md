@@ -26,3 +26,10 @@ git clone https://github.com/Entropt/nvim-distro ~/.config/nvim
 ```shell
 nvim
 ```
+
+#### Install plugin
+```
+:Lazy sync
+
+:TSUpdate
+```
